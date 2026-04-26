@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,220 +6,166 @@
     <title>Good Morning Mine 💜</title>
     <style>
         :root {
-            --primary-grad: linear-gradient(135deg, #6a11cb 0%, #ff7eb3 100%);
-            --glass: rgba(255, 255, 255, 0.2);
-            --border: rgba(255, 255, 255, 0.3);
+            --purple: #9b59b6;
+            --blue: #3498db;
+            --glass: rgba(255, 255, 255, 0.15);
+            --text: #ffffff;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
         body {
+            background: linear-gradient(135deg, #2c3e50, #000000);
             height: 100vh;
-            background: var(--primary-grad);
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            overflow: hidden;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        /* Floating Hearts Background */
-        .heart-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .floating-heart {
-            position: absolute;
-            bottom: -100px;
-            font-size: 20px;
-            animation: float 6s linear infinite;
-            opacity: 0.6;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* Top Bar: Clock & Music */
-        .top-bar {
-            position: fixed;
-            top: 20px;
-            width: 90%;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
+            overflow: hidden;
+            color: var(--text);
+            text-align: center;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
             z-index: 10;
         }
 
-        #music-toggle {
-            background: var(--glass);
-            border: 1px solid var(--border);
-            padding: 8px 12px;
-            border-radius: 20px;
-            color: white;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-        }
-
-        /* Main Screen */
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-            animation: fadeInDown 1s ease;
-        }
-
-        .sub-text {
-            margin-bottom: 30px;
-            font-weight: 300;
-            opacity: 0.9;
-        }
-
-        /* The Animated Heart */
-        .heart-container {
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            margin: 40px 0;
-        }
-
-        .heart-container:active {
-            transform: scale(0.9);
-        }
-
-        #main-heart {
-            font-size: 100px;
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: inline-block;
-            filter: drop-shadow(0 0 15px rgba(0, 153, 255, 0.6));
-        }
-
-        #heart-inner-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 14px;
-            font-weight: bold;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-            white-space: nowrap;
-        }
-
-        /* Glassmorphism Card */
-        #message-card {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 30px;
-            width: 100%;
-            max-width: 350px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            transform: translateY(50px) scale(0.8);
-            opacity: 0;
-            transition: all 0.6s ease;
-            display: none;
-        }
-
-        #message-card.visible {
-            display: block;
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        .morning-message {
-            font-size: 1.3rem;
-            font-weight: 500;
-            margin-bottom: 20px;
-            min-height: 50px;
-        }
-
-        button.refresh-btn {
-            background: white;
-            color: #6a11cb;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button.refresh-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        footer {
+        /* Top Info */
+        .info-bar {
             position: fixed;
-            bottom: 20px;
-            font-size: 0.8rem;
+            top: 20px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 0.9rem;
             opacity: 0.8;
         }
 
-        /* Animations */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Screens */
+        .screen { transition: all 0.5s ease-in-out; }
+        .hidden { display: none; opacity: 0; transform: scale(0.8); }
+
+        h1 { font-size: 2.2rem; margin-bottom: 10px; text-shadow: 0 0 15px var(--purple); }
+        .subtext { font-size: 1rem; margin-bottom: 30px; opacity: 0.9; }
+
+        /* Hearts */
+        .heart {
+            font-size: 80px;
+            cursor: pointer;
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 0 10px rgba(155, 89, 182, 0.5));
+            animation: pulse 1.5s infinite;
+        }
+        .heart:hover { transform: scale(1.2); }
+        .heart-blue { filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.5)); animation: pulse 1.5s infinite; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
-        /* Mobile specific adjustments */
-        @media (max-width: 480px) {
-            h1 { font-size: 2rem; }
+        /* Glass Card */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+            margin-bottom: 20px;
         }
+
+        .message-text { font-size: 1.3rem; font-weight: bold; min-height: 60px; display: flex; align-items: center; justify-content: center; }
+
+        button {
+            background: var(--purple);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+        button:active { transform: scale(0.95); }
+
+        /* Final Reveal */
+        .final-text {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(to right, #9b59b6, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(155, 89, 182, 0.5);
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px #fff); }
+            to { filter: drop-shadow(0 0 20px #9b59b6); }
+        }
+
+        /* Controls */
+        .controls { position: fixed; bottom: 60px; right: 20px; }
+        .music-btn { background: rgba(255,255,255,0.2); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+
+        footer { position: fixed; bottom: 15px; width: 100%; font-size: 0.8rem; opacity: 0.6; }
     </style>
 </head>
 <body>
 
-    <div class="heart-bg" id="heart-bg"></div>
+    <canvas id="bg-canvas"></canvas>
 
-    <div class="top-bar">
-        <div id="date-time">
-            <div id="date"></div>
-            <div id="clock" style="font-weight: bold;"></div>
-        </div>
-        <button id="music-toggle" onclick="toggleMusic()">🎵 ON</button>
+    <div class="info-bar">
+        <div id="date"></div>
+        <div id="clock" style="font-weight: bold; font-size: 1.2rem;"></div>
     </div>
 
-    <div id="main-content">
-        <h1>Good Morning Mine ☀️💜</h1>
-        <p class="sub-text" id="instruction">Tap the heart to receive today’s morning love</p>
-
-        <div class="heart-container" onclick="handleHeartClick()">
-            <span id="main-heart">💙</span>
-            <span id="heart-inner-text">Thangopulla</span>
+    <div class="container">
+        <div id="screen1" class="screen">
+            <h1>Good Morning Mine ☀️💜</h1>
+            <p class="subtext">Tap the heart to start your surprise</p>
+            <div class="heart" onclick="startSurprise()">💜</div>
+            <p style="margin-top:10px; font-size: 0.8rem;">Tap to open 💌</p>
         </div>
 
-        <div id="message-card">
-            <div class="morning-message" id="message-text"></div>
-            <button class="refresh-btn" onclick="showRandomMessage()">Tap again 💌</button>
+        <div id="screen2" class="screen hidden">
+            <div class="glass-card">
+                <div id="message" class="message-text"></div>
+                <button onclick="nextMessage()">Tap again 💌</button>
+            </div>
+            
+            <div id="blue-heart-container" class="hidden" style="margin-top: 20px;">
+                <div class="heart heart-blue" onclick="revealFinal()">💙</div>
+                <p>One last tap 😘</p>
+            </div>
         </div>
+
+        <div id="screen3" class="screen hidden">
+            <h1 class="final-text">THANGOPULLA 💜</h1>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="music-btn" onclick="toggleMusic()">🎵</button>
     </div>
 
     <footer>Made with love ❤️</footer>
 
-    <audio id="bg-music" loop>
-        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -230,81 +176,116 @@
             "Good morning di bangari 💖"
         ];
 
-        let hasBeenClicked = false;
-        const music = document.getElementById('bg-music');
-        const mainHeart = document.getElementById('main-heart');
-        const heartInnerText = document.getElementById('heart-inner-text');
-        const messageCard = document.getElementById('message-card');
-        const messageText = document.getElementById('message-text');
-        const instruction = document.getElementById('instruction');
+        // Background Animation
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let hearts = [];
 
-        // Initial Setup: Clock & Background
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class FloatingHeart {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 20;
+                this.size = Math.random() * 15 + 5;
+                this.speed = Math.random() * 2 + 1;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = '#9b59b6';
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.bezierCurveTo(this.x - this.size, this.y - this.size, this.x - this.size, this.y + this.size/2, this.x, this.y + this.size);
+                ctx.bezierCurveTo(this.x + this.size, this.y + this.size/2, this.x + this.size, this.y - this.size, this.x, this.y);
+                ctx.fill();
+            }
+            update() {
+                this.y -= this.speed;
+                if (this.y < -20) this.reset();
+            }
+        }
+
+        for(let i=0; i<20; i++) hearts.push(new FloatingHeart());
+
+        function animate() {
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            hearts.forEach(h => { h.update(); h.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Clock & Date
         function updateClock() {
             const now = new Date();
-            const options = { weekday: 'short', month: 'short', day: 'numeric' };
-            document.getElementById('date').innerText = now.toLocaleDateString(undefined, options);
+            document.getElementById('date').innerText = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        function createFloatingHearts() {
-            const container = document.getElementById('heart-bg');
-            const icons = ['💜', '💖', '✨', '🌸'];
-            setInterval(() => {
-                const heart = document.createElement('div');
-                heart.className = 'floating-heart';
-                heart.innerText = icons[Math.floor(Math.random() * icons.length)];
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                container.appendChild(heart);
-                setTimeout(() => heart.remove(), 6000);
-            }, 600);
-        }
-        createFloatingHearts();
+        // Logic
+        let music = document.getElementById('bgMusic');
+        let isMusicPlaying = false;
 
-        // Interaction Logic
-        function handleHeartClick() {
-            if (!hasBeenClicked) {
-                // Initial Transition
-                mainHeart.innerText = "💜";
-                mainHeart.style.filter = "drop-shadow(0 0 20px rgba(160, 32, 240, 0.7))";
-                mainHeart.style.transform = "scale(1.2)";
-                heartInnerText.style.opacity = "1";
-                instruction.style.opacity = "0";
-                
-                // Music logic
-                music.play().catch(e => console.log("Auto-play blocked, waiting for more interaction"));
-                
-                // Show Card
-                messageCard.style.display = "block";
-                setTimeout(() => messageCard.classList.add('visible'), 100);
-                
-                showRandomMessage();
-                hasBeenClicked = true;
-            }
-        }
-
-        function showRandomMessage() {
-            const randomIndex = Math.floor(Math.random() * messages.length);
-            // Quick fade out effect for text swap
-            messageText.style.opacity = 0;
+        function startSurprise() {
+            document.getElementById('screen1').classList.add('hidden');
             setTimeout(() => {
-                messageText.innerText = messages[randomIndex];
-                messageText.style.opacity = 1;
-            }, 200);
+                document.getElementById('screen1').style.display = 'none';
+                document.getElementById('screen2').classList.remove('hidden');
+                nextMessage();
+                startMusic();
+            }, 500);
+
+            // Show blue heart after 5 seconds
+            setTimeout(() => {
+                document.getElementById('blue-heart-container').classList.remove('hidden');
+            }, 5000);
+        }
+
+        function nextMessage() {
+            const msgEl = document.getElementById('message');
+            msgEl.innerText = messages[Math.floor(Math.random() * messages.length)];
+        }
+
+        function revealFinal() {
+            document.getElementById('screen2').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('screen2').style.display = 'none';
+                document.getElementById('screen3').classList.remove('hidden');
+                burstHearts();
+            }, 500);
+        }
+
+        function startMusic() {
+            music.play().catch(() => console.log("Audio needs user interaction first"));
+            isMusicPlaying = true;
         }
 
         function toggleMusic() {
-            const btn = document.getElementById('music-toggle');
-            if (music.paused) {
-                music.play();
-                btn.innerText = "🎵 ON";
-            } else {
-                music.pause();
-                btn.innerText = "🔇 OFF";
+            if(isMusicPlaying) music.pause(); else music.play();
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        function burstHearts() {
+            for(let i=0; i<50; i++) {
+                let h = new FloatingHeart();
+                h.y = canvas.height / 2;
+                h.x = canvas.width / 2;
+                h.speed = (Math.random() - 0.5) * 10;
+                h.opacity = 1;
+                hearts.push(h);
             }
         }
     </script>
 </body>
 </html>
+           
