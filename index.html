@@ -1,1 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good Morning Thangopulla 💜</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff75bc;
+            --secondary: #9b59b6;
+            --glass: rgba(255, 255, 255, 0.2);
+            --text: #2d3436;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fce4ec 0%, #e1bee7 100%);
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+            position: relative;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Animated Background */
+        .heart-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 117, 188, 0.3);
+            animation: float 6s infinite linear;
+            font-size: 20px;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Container */
+        .container {
+            max-width: 500px;
+            width: 100%;
+            z-index: 1;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: #6c5ce7;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        /* The Heart Button */
+        .heart-btn {
+            font-size: 80px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            filter: drop-shadow(0 0 10px rgba(255, 117, 188, 0.5));
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: pulse 1.5s infinite;
+        }
+
+        .heart-btn:active { transform: scale(0.8); }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Message Card */
+        #messageCard {
+            display: none;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .love-message {
+            font-size: 1.3rem;
+            color: #2d3436;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            background: linear-gradient(to right, #ff75bc, #9b59b6);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .action-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .mute-btn {
+            background: var(--glass);
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 10px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        /* Sparkles */
+        .sparkle {
+            position: absolute;
+            width: 5px; height: 5px;
+            background: white;
+            border-radius: 50%;
+            animation: flash 1s infinite alternate;
+        }
+
+        @keyframes flash {
+            from { opacity: 0.2; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="heart-bg" id="heartBg"></div>
+
+    <div class="container">
+        <h1 id="mainHeading">Good Morning Thangopulla ☀️💜</h1>
+        <p class="subtitle">Tap the heart to get today’s love message</p>
+        
+        <div id="heartContainer">
+            <button class="heart-btn" id="generateBtn" onclick="generateMessage()">❤️</button>
+            <p id="btnText" style="margin-top: 10px; font-weight: bold; color: #9b59b6;">Tap for Love 💖</p>
+        </div>
+
+        <div id="messageCard">
+            <p class="love-message" id="messageDisplay"></p>
+            <button class="action-btn" onclick="generateMessage()">Send Another Message 💌</button>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="mute-btn" onclick="toggleMusic()">🎵</button>
+    </div>
+
+    <footer>Made with love by your boy ❤️</footer>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const headings = [
+            "Good Morning Thangopulla ☀️💜", "Wake Up My Kutty 😘", "Morning My Chellam 🌸", 
+            "Rise and Shine My Baby ❤️", "Good Morning My Ponnu 🌷", "Hello Sunshine ☀️ My Love",
+            "My Day Starts With You 💖", "Morning Hug For You 🤗", "My Princess Awake Ah? 👑",
+            "Good Morning My Heartbeat 💓", "Wake Up My Thangam ✨", "Another Day To Love You 💕",
+            "Smile Please… It’s Morning 😍", "Morning Kiss Incoming 😘", "Open Your Eyes My Love 🌞"
+        ];
+
+        const btnTexts = [
+            "Tap for Love 💖", "Give Me Love Message 💌", "Press My Heart ❤️", 
+            "Show Today’s Love ☀️", "Send Morning Kiss 😘", "Another Love Please 💕",
+            "Surprise Me Baby 🎁", "Love Loading… 💓", "More Love More Love 💞",
+            "Click for Smile 😊", "Love Generator 💝", "Message From Your Boy 😍"
+        ];
+
+        const messages = [
+            "Good morning thangam, today will be beautiful because you exist 💖",
+            "Wake up kutty, my heart already started missing you ☀️",
+            "Morning chellam, my first smile is always because of you 😊",
+            "If hugs were sunlight, I’d send you the whole sky 🌞",
+            "Good morning baby, love you more than yesterday 💕",
+            "Rise and shine my princess, your king is thinking of you 👑",
+            "Every sunrise = one more day loving you ❤️",
+            "My day starts after your smile 😘",
+            "Morning ponnu, my heart beats only for you 💓",
+            "I wish I was your blanket right now 🥺",
+            "Coffee ☕ + You = Perfect Morning 💜",
+            "Sending 1000 morning kisses 😚",
+            "You are my daily happiness notification 📲💖",
+            "Good morning my forever person 🌍",
+            "Even the sun is jealous of your glow ☀️",
+            "My favorite morning habit is loving you 💕",
+            "Wake up sleepy kutty, love is waiting 😍",
+            "Today's mission: make you smile 😊",
+            "Distance can’t stop my morning love 💌",
+            "My world starts with your good morning 💖",
+            "Good morning chellam, you are the caffeine to my soul! ☕✨",
+            "Rise up baby, the world is waiting for its queen. 👑",
+            "I love you more than biryani, my kutty ponnu! 🥘❤️",
+            "Morning thangam, just thinking of you makes my heart go 'thik thik'. 💓",
+            "Wake up my pattu! Your smile is my daily boost. 🌸",
+            "Good morning baby, may your day be as sweet as your voice. 🍬",
+            "Hey beautiful, wake up and bless the world with your glow. 🌟",
+            "I dreamt of you all night, and now I get to love you all day. 😍",
+            "Good morning my life! You are my favorite thought. 💭💖",
+            "Sending you a digital hug since I can't be there yet. 🤗💜",
+            "Morning baby! You’re the reason I wake up with a smile. 😊",
+            "Good morning ponnu, eat well and have a happy day! 🍎",
+            "Every morning is a blessing because I have you, chellam. 🙏❤️",
+            "Wake up! My phone is waiting for your 'Good Morning' text. 📱✨",
+            "Good morning my rowdy baby, stay cute as always! 😘",
+            "I hope your morning is as bright as your eyes, kutty. 👀✨",
+            "Thangam, you are the best thing that ever happened to me. 🌈",
+            "Morning baby! Don't forget that someone is madly in love with you. 🙋‍♂️❤️",
+            "Wishing you a day full of laughter and love, my ponnu. 🌻",
+            "Good morning! Just a reminder: You are my everything. 🌍💖",
+            "Get up sleepy head! The sun is up and so is my love for you. ☀️",
+            "Morning chellam, stay strong and kill it today! 💪💜",
+            "My morning is incomplete without telling you how much I love you. 💌",
+            "Good morning my little angel, have a magical day. 👼✨",
+            "Wake up pattu, I’m sending you 5000 virtual kisses! 💋💋",
+            "Morning baby, you are the melody to my life's song. 🎵💖",
+            "Good morning thangam, keep shining like the star you are. ⭐",
+            "Morning my love, may your coffee be hot and your day be cool. ☕❄️",
+            "Good morning ponnu, counting hours until I see you again. ⏳❤️",
+            "Wake up my world, your boy is waiting for you! 😍"
+        ];
+
+        // Initialize Random Heading
+        window.onload = () => {
+            document.getElementById('mainHeading').innerText = headings[Math.floor(Math.random() * headings.length)];
+            createHearts();
+        };
+
+        function createHearts() {
+            const bg = document.getElementById('heartBg');
+            for(let i=0; i<20; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart';
+                    heart.innerHTML = '💜';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                    bg.appendChild(heart);
+                    setTimeout(() => heart.remove(), 6000);
+                }, i * 300);
+            }
+            setInterval(createHearts, 6000);
+        }
+
+        function generateMessage() {
+            // Random Message
+            const msg = messages[Math.floor(Math.random() * messages.length)];
+            const display = document.getElementById('messageDisplay');
+            const card = document.getElementById('messageCard');
+            const btnText = document.getElementById('btnText');
+            
+            display.innerText = msg;
+            card.style.display = 'block';
+            
+            // Random Button Text
+            btnText.innerText = btnTexts[Math.floor(Math.random() * btnTexts.length)];
+            
+            // Play Sound (Optional: simple click feel)
+            const clickSound = new Audio('https://www.soundjay.com/buttons/sounds/button-37a.mp3');
+            clickSound.play().catch(()=> {}); // Catch block for browser restrictions
+
+            // Scroll to message
+            card.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const btn = document.querySelector('.mute-btn');
+            if (music.paused) {
+                music.play();
+                btn.innerText = '🔊';
+            } else {
+                music.pause();
+                btn.innerText = '🎵';
+            }
+        }
+    </script>
+</body>
+</html>
 
