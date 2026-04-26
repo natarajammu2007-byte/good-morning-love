@@ -28,3 +28,283 @@
             overflow: hidden;
             color: white;
             text-align: center;
+            padding: 20px;
+        }
+
+        /* Floating Hearts Background */
+        .heart-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -100px;
+            font-size: 20px;
+            animation: float 6s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Top Bar: Clock & Music */
+        .top-bar {
+            position: fixed;
+            top: 20px;
+            width: 90%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            z-index: 10;
+        }
+
+        #music-toggle {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Main Screen */
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            animation: fadeInDown 1s ease;
+        }
+
+        .sub-text {
+            margin-bottom: 30px;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        /* The Animated Heart */
+        .heart-container {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin: 40px 0;
+        }
+
+        .heart-container:active {
+            transform: scale(0.9);
+        }
+
+        #main-heart {
+            font-size: 100px;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-block;
+            filter: drop-shadow(0 0 15px rgba(0, 153, 255, 0.6));
+        }
+
+        #heart-inner-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            font-weight: bold;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            white-space: nowrap;
+        }
+
+        /* Glassmorphism Card */
+        #message-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transform: translateY(50px) scale(0.8);
+            opacity: 0;
+            transition: all 0.6s ease;
+            display: none;
+        }
+
+        #message-card.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .morning-message {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            min-height: 50px;
+        }
+
+        button.refresh-btn {
+            background: white;
+            color: #6a11cb;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button.refresh-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        footer {
+            position: fixed;
+            bottom: 20px;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="heart-bg" id="heart-bg"></div>
+
+    <div class="top-bar">
+        <div id="date-time">
+            <div id="date"></div>
+            <div id="clock" style="font-weight: bold;"></div>
+        </div>
+        <button id="music-toggle" onclick="toggleMusic()">🎵 ON</button>
+    </div>
+
+    <div id="main-content">
+        <h1>Good Morning Mine ☀️💜</h1>
+        <p class="sub-text" id="instruction">Tap the heart to receive today’s morning love</p>
+
+        <div class="heart-container" onclick="handleHeartClick()">
+            <span id="main-heart">💙</span>
+            <span id="heart-inner-text">Thangopulla</span>
+        </div>
+
+        <div id="message-card">
+            <div class="morning-message" id="message-text"></div>
+            <button class="refresh-btn" onclick="showRandomMessage()">Tap again 💌</button>
+        </div>
+    </div>
+
+    <footer>Made with love ❤️</footer>
+
+    <audio id="bg-music" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const messages = [
+            "Good morning chellakutyy ☀️💜",
+            "Good morning thangopulla 😘",
+            "Good morning di kutty ponaa 🥰",
+            "Good morning di bangari 💖"
+        ];
+
+        let hasBeenClicked = false;
+        const music = document.getElementById('bg-music');
+        const mainHeart = document.getElementById('main-heart');
+        const heartInnerText = document.getElementById('heart-inner-text');
+        const messageCard = document.getElementById('message-card');
+        const messageText = document.getElementById('message-text');
+        const instruction = document.getElementById('instruction');
+
+        // Initial Setup: Clock & Background
+        function updateClock() {
+            const now = new Date();
+            const options = { weekday: 'short', month: 'short', day: 'numeric' };
+            document.getElementById('date').innerText = now.toLocaleDateString(undefined, options);
+            document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function createFloatingHearts() {
+            const container = document.getElementById('heart-bg');
+            const icons = ['💜', '💖', '✨', '🌸'];
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerText = icons[Math.floor(Math.random() * icons.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                container.appendChild(heart);
+                setTimeout(() => heart.remove(), 6000);
+            }, 600);
+        }
+        createFloatingHearts();
+
+        // Interaction Logic
+        function handleHeartClick() {
+            if (!hasBeenClicked) {
+                // Initial Transition
+                mainHeart.innerText = "💜";
+                mainHeart.style.filter = "drop-shadow(0 0 20px rgba(160, 32, 240, 0.7))";
+                mainHeart.style.transform = "scale(1.2)";
+                heartInnerText.style.opacity = "1";
+                instruction.style.opacity = "0";
+                
+                // Music logic
+                music.play().catch(e => console.log("Auto-play blocked, waiting for more interaction"));
+                
+                // Show Card
+                messageCard.style.display = "block";
+                setTimeout(() => messageCard.classList.add('visible'), 100);
+                
+                showRandomMessage();
+                hasBeenClicked = true;
+            }
+        }
+
+        function showRandomMessage() {
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            // Quick fade out effect for text swap
+            messageText.style.opacity = 0;
+            setTimeout(() => {
+                messageText.innerText = messages[randomIndex];
+                messageText.style.opacity = 1;
+            }, 200);
+        }
+
+        function toggleMusic() {
+            const btn = document.getElementById('music-toggle');
+            if (music.paused) {
+                music.play();
+                btn.innerText = "🎵 ON";
+            } else {
+                music.pause();
+                btn.innerText = "🔇 OFF";
+            }
+        }
+    </script>
+</body>
+</html>
